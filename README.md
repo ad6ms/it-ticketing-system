@@ -1,0 +1,1 @@
+A multi-tenant IT ticketing system built with Vue.js, Node.js, and PostgreSQL. Each organization has its own isolated ticketing environment. Users can create, update, and manage support tickets with email-based authentication and role-based access control.
