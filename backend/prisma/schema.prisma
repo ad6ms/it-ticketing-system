@@ -27,6 +27,7 @@ model User {
   name      String
   role      Role     @default(USER)
   verified  Boolean  @default(false)
+  verificationToken String? @unique
   createdAt DateTime @default(now())
   organisationId String?
   organisation Organisation? @relation(fields: [organisationId], references: [id])
