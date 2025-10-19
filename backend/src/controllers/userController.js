@@ -51,6 +51,39 @@ const registerUser = async (request, response) => {
   }
 };
 
+const verifyUser = async (request, response) => {
+  const { email, verificationToken } = request.body;
+
+  if (!email || !verificationToken) {
+    return response
+      .status(400)
+      .json({ message: "Please provide the email and verification token" });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return response.status(404).json({ message: "User not found" });
+    }
+
+    if (user.verificationToken !== verificationToken) {
+      return response
+        .status(401)
+        .json({ message: "Authentication token incorrect" });
+    }
+
+    await prisma.user.update({
+      where: { email },
+      data: { verified: true, verificationToken: null },
+    });
+  } catch (error) {
+    console.error("Error verifying user", error);
+    response.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   registerUser,
+  verifyUser,
 };
